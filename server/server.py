@@ -1,32 +1,28 @@
-#!/usr/bin/env python3
-import argparse
+#
+#   Hello World server in Python
+#   Binds REP socket to tcp://*:5555
+#   Expects b"Hello" from client, replies with b"World"
+#
+
+import time
 
 import zmq
 
+context = zmq.Context()
+socket = context.socket(zmq.REP)
+socket.bind("tcp://*:5555")
+print("Server initialized.")
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description="ZeroMQ REP server")
-    parser.add_argument("--bind-ip", default="0.0.0.0", help="IP address to bind")
-    parser.add_argument("--port", type=int, default=5555, help="Port to bind")
-    args = parser.parse_args()
+while True:
+    #  Wait for next request from client
+    message = socket.recv()
+    print("Received request: %s" % message)
 
-    context = zmq.Context()
-    socket = context.socket(zmq.REP)
-    endpoint = f"tcp://{args.bind_ip}:{args.port}"
-    socket.bind(endpoint)
+    if message != "Hello":
+        socket.send("Decí Hello, error")
+    else:
+        #  Do some 'work'
+        time.sleep(1)
 
-    print(f"Server listening on {endpoint}")
-    try:
-        while True:
-            message = socket.recv_string()
-            print(f"Received: {message}")
-            socket.send_string(f"Reply from Python server: {message}")
-    except KeyboardInterrupt:
-        print("Shutting down server")
-    finally:
-        socket.close(0)
-        context.term()
-
-
-if __name__ == "__main__":
-    main()
+        #  Send reply back to client
+        socket.send(b"World")

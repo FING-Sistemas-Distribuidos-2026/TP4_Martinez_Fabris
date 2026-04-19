@@ -18,3 +18,8 @@ python3 server.py
 mvn compile
 mvn exec:java
 ```
+
+---
+
+Server iniciado en instancia de Adriano
+Cliente iniciado en instancia de Paula

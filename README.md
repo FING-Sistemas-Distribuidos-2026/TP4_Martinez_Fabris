@@ -21,5 +21,6 @@ mvn exec:java
 
 ---
 
-Server iniciado en instancia de Adriano
-Cliente iniciado en instancia de Paula
+Server (Python) iniciado en instancia de Adriano Fabris
+
+Cliente (Java) iniciado en instancia de Paula Martinez
